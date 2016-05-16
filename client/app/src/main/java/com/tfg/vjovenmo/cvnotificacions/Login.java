@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
 
     String SENDER_ID = "574413074189";
 
-    static final String TAG = "GCMDemo";
+    static final String TAG = "GCM";
 
     private Context context;
     private String regid;
@@ -85,25 +85,26 @@ public class Login extends AppCompatActivity {
                 //String passw=pass.getText().toString();
 
                 if (checklogindata(usuario) == true) {
-                    new asynclogin().execute(usuario);
+
                     context = getApplicationContext();
 
                     //Chequemos si está instalado Google Play Services
-                    if(checkPlayServices())
-                    {
-                    gcm = GoogleCloudMessaging.getInstance(Login.this);
+                    if(checkPlayServices()) {
+                        Log.d(TAG, "entramos checkplayservices");
+                        gcm = GoogleCloudMessaging.getInstance(Login.this);
 
-                    //Obtenemos el Registration ID guardado
-                    regid = getRegistrationId(context);
-
-                    //Si no disponemos de Registration ID comenzamos el registro
-                    if (regid.equals("")) {
-                        TareaRegistroGCM tarea = new TareaRegistroGCM();
-                        tarea.execute(usuario);
+                        //Obtenemos el Registration ID guardado
+                        regid = getRegistrationId(context);
+                        Log.d(TAG, regid.toString());
+                        //Si no disponemos de Registration ID comenzamos el registro
+                        if (regid.equals("")) {
+                            TareaRegistroGCM tarea = new TareaRegistroGCM();
+                            tarea.execute(usuario);
+                            new asynclogin().execute(usuario);
+                        }
+                        new asynclogin().execute(usuario);
                     }
-                    }
-                    else
-                    {
+                    else {
                         Log.i(TAG, "No se ha encontrado Google Play Services.");
                     }
                 } else {
@@ -119,6 +120,7 @@ public class Login extends AppCompatActivity {
         {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
             {
+                Log.e(TAG, "Dispositivo soportado.");
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             }
@@ -249,6 +251,8 @@ public class Login extends AppCompatActivity {
         {
             Log.d(TAG, "Registro GCM no encontrado.");
             return "";
+        }else {
+            Log.d(TAG, registrationId);
         }
 
         String registeredUser =
