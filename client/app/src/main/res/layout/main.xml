@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/negre">
+    android:background="@color/blanc">
 
     <EditText
         android:layout_width="250dp"
@@ -16,8 +16,8 @@
         android:focusable="true"
         android:hint="Usuari"
         android:textAlignment="center"
-        android:textColorHint="@color/taronjaUAB"
-        android:textColor="@color/taronjaUAB"
+        android:textColorHint="@color/negre"
+        android:textColor="@color/negre"
         android:enabled="true" />
 
     <EditText
@@ -30,8 +30,8 @@
         android:layout_marginBottom="45dp"
         android:layout_above="@+id/botoLogin"
         android:layout_centerHorizontal="true"
-        android:textColorHint="@color/taronjaUAB"
-        android:textColor="@color/taronjaUAB" />
+        android:textColorHint="@color/negre"
+        android:textColor="@color/negre" />
 
     <Button
         android:layout_width="125dp"
@@ -41,8 +41,8 @@
         android:layout_marginBottom="150dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/taronjaUAB"
-        android:background="@color/blanc" />
+        android:textColor="@color/blanc"
+        android:background="@color/negre" />
 
     <ImageView
         android:layout_width="700dp"

@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     public static final String EXTRA_MESSAGE = "message";
-    private static final String PROPERTY_REG_ID = "AIzaSyA3NaeCkE1SUUP5sL-8g1Nz-g-uYSeQ2_A";
+    private static final String PROPERTY_REG_ID = "AIzaSyCfJd1yfGnx5GOy-ojKbmHgrVphW1OR1Uw";
     private static final String PROPERTY_APP_VERSION = "1.0";
     private static final String PROPERTY_EXPIRATION_TIME = "onServerExpirationTimeMs";
     private static final String PROPERTY_USER = "user";
@@ -63,6 +63,7 @@ public class Login extends AppCompatActivity {
     String IP_Server = "www.campusvirtual-tfg-uab.cat";
     //Path dels fitxers
     String URL_connect = "http://" + IP_Server + "/app_login/acces.php";
+    String URL_connect2 = "http://" + IP_Server + "/app_login/acces2.php";
 
     boolean result_back;
     private ProgressDialog pDialog;
@@ -101,8 +102,10 @@ public class Login extends AppCompatActivity {
                             TareaRegistroGCM tarea = new TareaRegistroGCM();
                             tarea.execute(usuario);
                             new asynclogin().execute(usuario);
+                        }else {
+                            //saveReg(regid);
+                            new asynclogin().execute(usuario);
                         }
-                        new asynclogin().execute(usuario);
                     }
                     else {
                         Log.i(TAG, "No se ha encontrado Google Play Services.");
@@ -144,7 +147,7 @@ public class Login extends AppCompatActivity {
         toast1.show();
     }
 
-    /*Valida el estado del logueo solamente necesita como parametros el usuario y passw*/
+    /* Valida el estado del logueo solamente necesita como parametros el usuario y passw*/
     public boolean loginstatus(String username) {
         int logstatus = -1;
 
@@ -320,21 +323,12 @@ public class Login extends AppCompatActivity {
                 {
                     gcm = GoogleCloudMessaging.getInstance(context);
                 }
-
-                //Nos registramos en los servidores de GCM
+                //Ens registrem al servidor GCM
                 regid = gcm.register(SENDER_ID);
-
                 Log.d(TAG, "Registrado en GCM: registration_id=" + regid);
+
+                saveReg(regid,params[0]);
                 setRegistrationId(context, params[0], regid);
-
-                //Nos registramos en nuestro servidor
-                /*boolean registrado = registroServidor(params[0], regid);
-
-                //Guardamos los datos del registro
-                if(registrado)
-                {
-                    setRegistrationId(context, params[0], regid);
-                }*/
             }
             catch (IOException ex)
             {
@@ -363,54 +357,94 @@ public class Login extends AppCompatActivity {
         editor.commit();
     }
 
-    /*private boolean registroServidor(String usuario, String regId)
-    {
-        boolean reg = false;
-
-        final String NAMESPACE = "http://sgoliver.net/";
-        final String URL="http://10.0.2.2:1634/ServicioRegistroGCM.asmx";
-        final String METHOD_NAME = "RegistroCliente";
-        final String SOAP_ACTION = "http://sgoliver.net/RegistroCliente";
-
-        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-        request.addProperty("usuario", usuario);
-        request.addProperty("regGCM", regId);
-
-        SoapSerializationEnvelope envelope =
-                new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-        envelope.dotNet = true;
-
-        envelope.setOutputSoapObject(request);
-
-        HttpTransportSE transporte = new HttpTransportSE(URL);
-
-        try
-        {
-            transporte.call(SOAP_ACTION, envelope);
-
-            SoapPrimitive resultado_xml =(SoapPrimitive)envelope.getResponse();
-            String res = resultado_xml.toString();
-
-            if(res.equals("1"))
-            {
-                Log.d(TAG, "Registrado en mi servidor.");
-                reg = true;
-            }
-        }
-        catch (Exception e)
-        {
-            Log.d(TAG, "Error registro en mi servidor: " + e.getCause() + " || " + e.getMessage());
-        }
-
-        return reg;
-    }*/
-
     @Override
     protected void onResume()
     {
         super.onResume();
         checkPlayServices();
+    }
+
+    public void saveReg(String idGCM, String user){
+        Log.e("saveReg","ENTRAMOS SAVEREG: "+idGCM);
+
+        new asyncsave().execute(idGCM, user);
+    }
+
+    class asyncsave extends AsyncTask<String, String, String> {
+        String idGCM, user;
+
+        /*protected void onPreExecute() {
+            // Mostrem el ProgressDialog
+            pDialog = new ProgressDialog(Login.this);
+            pDialog.setMessage("Un moment si us plau....");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }*/
+
+        // S'executa darrere el onPreExecute
+        protected String doInBackground(String... params) {
+            idGCM = params[0];
+            user = params[1];
+            Log.e("asyncsave","idgcm: "+idGCM);
+            Log.e("asyncsave","user: "+user);
+
+            //String idGCM = params[0];
+            Log.e("idGCM-asynsave","idGCM-asynsave: "+idGCM);
+            // Realitzem en segon pla la connexió
+            if (idGCMstatus(idGCM,user) == true) {
+                return "ok";
+            } else {
+                return "err";
+            }
+
+        }
+
+        // Un cop tenim resposta s'executa.
+        protected void onPostExecute(String result) {
+            pDialog.dismiss();
+            Log.e("onPostExecute=", "" + result);
+
+        }
+    }
+
+    public boolean idGCMstatus(String idGCM, String user) {
+        int logstatus = -1;
+
+    	/*ArrayList nom, valor amb les dades passades com a parametres*/
+        ArrayList<NameValuePair> postparameters2send = new ArrayList<NameValuePair>();
+
+        Log.e("idGCMstatus","idGCMStatus: "+ idGCM);
+        postparameters2send.add(new BasicNameValuePair("idGCM", idGCM));
+        postparameters2send.add(new BasicNameValuePair("user",user));
+
+        // Realitzem un pateició POST als nostres fitxers, enviant com parametre l'ArrayList
+        JSONArray jdata = post.getserverdata(postparameters2send, URL_connect2);
+
+        SystemClock.sleep(950);
+
+        // Si el JSON no es buit, treballem amb ell
+        if (jdata != null && jdata.length() > 0) {
+            JSONObject json_data;
+            try {
+                json_data = jdata.getJSONObject(0);
+                logstatus = json_data.getInt("logstatus");
+                Log.e("statusidGCM", "statusidGCM= " + logstatus);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            // Validem el valor obtingut
+            if (logstatus == 0) {
+                Log.e("statusidGCM ", "invàlid");
+                return false;
+            } else {
+                Log.e("statusidGCM ", "vàlid");
+                return true;
+            }
+        } else {
+            Log.e("JSON  ", "ERROR");
+            return false;
+        }
     }
 }

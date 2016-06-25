@@ -14,7 +14,8 @@
 
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="net.sgoliver.android.newgcm" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.tfg.vjovenmo.cvnotificacions" />
             </intent-filter>
         </receiver>
 
