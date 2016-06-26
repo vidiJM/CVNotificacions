@@ -18,9 +18,7 @@ public class POST2GCM {
 	public static void post(String apiKey, String regID, String nomPract, double nota){ try {
 
 		URL url = new URL("https://android.googleapis.com/gcm/send");
-        String json ="{\"to\": \""+regID+"\",\"notification\":{\"body\":\"En la practica "+nomPract+" has obtingut un: "+nota+"\"}}";
-        
-        
+        String json ="{\"to\": \""+regID+"\",\"notification\":{\"body\":\"En la practica "+nomPract+" has obtingut un: "+nota+"\"}}"; 
         
         String length = String.valueOf(json.length());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -32,6 +32,7 @@ import com.mysql.jdbc.PreparedStatement;
 public class SimpleJob implements Job {
 	
 	final String API_KEY = "AIzaSyCfJd1yfGnx5GOy-ojKbmHgrVphW1OR1Uw";
+	public String nomUser = null, regID = null, nomPract = null;
 	public int pract = 0, usuari = 0;
 	public long time, lasttime;
 	public double nota = 0;
@@ -47,17 +48,13 @@ public class SimpleJob implements Job {
 		
 		Statement sta = null;
 		Statement sta2 = null;
-
 		Connection con = null;
 		ResultSet res = null;
 		ResultSet res2 = null;
-
-		String nomUser = null, regID = null, nomPract = null;
-		
 		
 		try {			
 			time = (System.currentTimeMillis()/1000L)-100;
-			System.out.println("TEMPS MAQUINA: "+time);
+			//System.out.println("TEMPS MAQUINA: "+time);
 			Class.forName(driver).newInstance();
 			con = DriverManager.getConnection(url, user, password);
 			sta = con.createStatement();
@@ -70,8 +67,7 @@ public class SimpleJob implements Job {
 					while (res2.next()){
 						lasttime = res2.getLong(1);
 					}
-					
-					System.out.println("TEMPS BBDD: "+lasttime);
+					//System.out.println("TEMPS BBDD: "+lasttime);
 					if (lasttime>time){
 						lasttime = time;
 						usuari = Integer.parseInt(res.getString(1));
@@ -96,26 +92,10 @@ public class SimpleJob implements Job {
 						while (res.next()){
 							nomPract = res.getString(1);
 						}
-						
 				        POST2GCM.post(API_KEY, regID, nomPract, nota);
-
 					}					
 				}
-				//System.out.println(res.getInt(1)+" "+res.getDouble(2)+" "+res.getInt(3)+" "+res.getInt(4));
 			}
-			
-
-			/*if (pre<last){
-				//enviarem el missatge al server GCM
-				
-				System.out.println("enviem push: "+usuari+" "+nota+" "+pract+" "+nomPract+" "+last+" "+regID);
-				
-			}*/
-			//String msg = "A la practica "+nomPract+" has obtingut la valoració de "+nota+"";
-			
-	        
-			//res.close();
-			//res2
 			sta.close();
 			con.close();
 		} catch (Exception e) {
@@ -123,5 +103,4 @@ public class SimpleJob implements Job {
 			e.printStackTrace();
 		}
 	}
-	
 }
