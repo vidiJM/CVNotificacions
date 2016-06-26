@@ -88,18 +88,17 @@ public class Login extends AppCompatActivity {
                 if (checklogindata(usuario) == true) {
 
                     context = getApplicationContext();
-
-                    //Chequemos si está instalado Google Play Services
+                    //Comprovem que Google Play Service esta instalat
                     if(checkPlayServices()) {
-                        Log.d(TAG, "entramos checkplayservices");
+                        //Log.d(TAG, "entramos checkplayservices");
                         gcm = GoogleCloudMessaging.getInstance(Login.this);
 
-                        //Obtenemos el Registration ID guardado
+                        //Obtenim el RegistrationID guardat
                         regid = getRegistrationId(context);
                         Log.d(TAG, regid.toString());
-                        //Si no disponemos de Registration ID comenzamos el registro
+                        //Si no dispossem de Registration ID començem el registre
                         if (regid.equals("")) {
-                            TareaRegistroGCM tarea = new TareaRegistroGCM();
+                            TareaRegistreGCM tarea = new TareaRegistreGCM();
                             tarea.execute(usuario);
                             new asynclogin().execute(usuario);
                         }else {
@@ -108,7 +107,7 @@ public class Login extends AppCompatActivity {
                         }
                     }
                     else {
-                        Log.i(TAG, "No se ha encontrado Google Play Services.");
+                        Log.i(TAG, "No s'ha trtobat Google Play Services.");
                     }
                 } else {
                     err_login();
@@ -147,7 +146,7 @@ public class Login extends AppCompatActivity {
         toast1.show();
     }
 
-    /* Valida el estado del logueo solamente necesita como parametros el usuario y passw*/
+    /* Valida l'estt del loguin nomes necessitem com a parametre el nom d'usuari*/
     public boolean loginstatus(String username) {
         int logstatus = -1;
 
@@ -187,7 +186,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    // Verifiquem que ningun camp esta buit
+    // Verifiquem que cap camp es buit
     public boolean checklogindata(String username) {
         if (username.equals("")) {
             Log.e("Login ui", "checklogindata user or pass error");
@@ -231,7 +230,7 @@ public class Login extends AppCompatActivity {
         // Un cop tenim resposta s'executa.
         protected void onPostExecute(String result) {
             pDialog.dismiss();
-            Log.e("onPostExecute=", "" + result);
+            //Log.e("onPostExecute=", "" + result);
             if (result.equals("ok")) {
                 Intent i = new Intent(Login.this, HiScreen.class);
                 i.putExtra("user", user);
@@ -252,7 +251,7 @@ public class Login extends AppCompatActivity {
 
         if (registrationId.length() == 0)
         {
-            Log.d(TAG, "Registro GCM no encontrado.");
+            Log.d(TAG, "Registre GCM no trobat.");
             return "";
         }else {
             Log.d(TAG, registrationId);
@@ -270,25 +269,25 @@ public class Login extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String expirationDate = sdf.format(new Date(expirationTime));
 
-        Log.d(TAG, "Registro GCM encontrado (usuario=" + registeredUser +
-                ", version=" + registeredVersion +
-                ", expira=" + expirationDate + ")");
+        Log.d(TAG, "Registre GCM trobat (usuari= " + registeredUser +
+                ", versio= " + registeredVersion +
+                ", expira= " + expirationDate + ")");
 
         int currentVersion = getAppVersion(context);
 
         if (registeredVersion != currentVersion)
         {
-            Log.d(TAG, "Nueva versión de la aplicación.");
+            Log.d(TAG, "Nova versió de l'aplicació.");
             return "";
         }
         else if (System.currentTimeMillis() > expirationTime)
         {
-            Log.d(TAG, "Registro GCM expirado.");
+            Log.d(TAG, "Registre GCM expirat.");
             return "";
         }
         else if (!user.getText().toString().equals(registeredUser))
         {
-            Log.d(TAG, "Nuevo nombre de usuario.");
+            Log.d(TAG, "Nou nom d'usuari.");
             return "";
         }
 
@@ -306,11 +305,11 @@ public class Login extends AppCompatActivity {
         }
         catch (PackageManager.NameNotFoundException e)
         {
-            throw new RuntimeException("Error al obtener versión: " + e);
+            throw new RuntimeException("Error al obtenir versió: " + e);
         }
     }
 
-    private class TareaRegistroGCM extends AsyncTask<String, Integer,String>
+    private class TareaRegistreGCM extends AsyncTask<String, Integer,String>
     {
         @Override
         protected String doInBackground(String... params)
@@ -325,14 +324,14 @@ public class Login extends AppCompatActivity {
                 }
                 //Ens registrem al servidor GCM
                 regid = gcm.register(SENDER_ID);
-                Log.d(TAG, "Registrado en GCM: registration_id=" + regid);
+                //Log.d(TAG, "Registrat en GCM: registration_id= " + regid);
 
                 saveReg(regid,params[0]);
                 setRegistrationId(context, params[0], regid);
             }
             catch (IOException ex)
             {
-                Log.d(TAG, "Error registro en GCM:" + ex.getMessage());
+                Log.d(TAG, "Error registre en GCM:" + ex.getMessage());
             }
 
             return msg;
@@ -365,8 +364,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void saveReg(String idGCM, String user){
-        Log.e("saveReg","ENTRAMOS SAVEREG: "+idGCM);
-
+        //Log.e("saveReg","ENTRAMOS SAVEREG: "+idGCM);
         new asyncsave().execute(idGCM, user);
     }
 
