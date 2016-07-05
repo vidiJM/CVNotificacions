@@ -5,47 +5,60 @@
   android:layout_height="fill_parent"
   android:background="#FFFFFF"
   android:orientation="vertical"
-  >
-  
+  android:weightSum="1">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/taronjaUAB"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="CVNotify"
+            android:id="@+id/textView"
+            android:layout_gravity="center_vertical"
+            android:textSize="35dp"
+            android:layout_marginLeft="7dp"
+            android:textColor="@color/blanc"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/imageButton"
+            android:layout_weight="0.08"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_power_settings_new_white_24dp"
+            android:background="@color/taronjaUAB"
+            android:layout_marginLeft="140dp"
+            android:layout_marginRight="7dp"/>
+
+    </TableRow>
+
     <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#21610B"
+                android:textColor="@color/taronjaUAB"
                 android:layout_marginTop="15dip"
                 android:gravity="center"
                 android:textSize="25dip"
                 android:text="!Benvingut!"
                 
     />
-    
-    
-     <TextView   
+
+
+     <TextView
                 android:id="@+id/usr_name"
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:textColor="#FF4000"
+                android:textColor="@color/taronjaUAB"
                 android:layout_marginTop="45dip"
                 android:textSize="22dip"
                 android:gravity="center"                
                 
     />
-    
-       <TextView   
-                android:id="@+id/logoff"
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
-                android:textColor="#B40404"
-                android:layout_marginTop="45dip"
-                android:textSize="22dip"
-                android:gravity="bottom|center_horizontal"   
-                android:text="!Cerrar Sesiòn!"                            
-                
-    />
-    
-    
-    
-    
-   
-    
-    
-  
+
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.tfg.vjovenmo.cvnotificacions;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +36,7 @@ import java.util.Locale;
 
 import library.Httppostaux;
 
-public class Login extends AppCompatActivity {
+public class Login extends Activity{
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -72,7 +73,6 @@ public class Login extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        getSupportActionBar().hide();
         post = new Httppostaux();
         user = (EditText) findViewById(R.id.usuariEditText);
         //pass= (EditText) findViewById(R.id.passwordEditText);
@@ -324,7 +324,7 @@ public class Login extends AppCompatActivity {
                 }
                 //Ens registrem al servidor GCM
                 regid = gcm.register(SENDER_ID);
-                //Log.d(TAG, "Registrat en GCM: registration_id= " + regid);
+                Log.d(TAG, "Registrat en GCM: registration_id= " + regid);
 
                 saveReg(regid,params[0]);
                 setRegistrationId(context, params[0], regid);
